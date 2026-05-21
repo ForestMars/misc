@@ -3,6 +3,14 @@ import os
 import argparse
 from pypdf import PdfReader
 
+# =====================================================================
+# HOISTED CONFIGURATION CONSTANTS
+# =====================================================================
+# Terminal formatting codes (ANSI Escape Sequences)
+# Common options: GREEN = "\033[92m", BLUE = "\033[94m", CYAN = "\033[96m", YELLOW = "\033[93m"
+SUMMARY_COLOR = "\033[92m"  
+COLOR_RESET = "\033[0m"     # Resets the terminal back to white/default text
+
 # 1. Define the rigorous parameter configurations for our Summary Styles
 SUMMARY_PROFILES = {
     "tldr": {
@@ -127,5 +135,6 @@ def run_processing_pipeline(text, style_config):
 config = SUMMARY_PROFILES[selected_style]
 summary_output = run_processing_pipeline(document_text, config)
 
+# Print out using the hoisted color configuration
 print(f"\n--- {selected_style.upper()} SUMMARY ---")
-print(summary_output)
+print(f"{SUMMARY_COLOR}{summary_output}{COLOR_RESET}")
