@@ -6,56 +6,42 @@ from pypdf import PdfReader
 # =====================================================================
 # HOISTED CONFIGURATION CONSTANTS
 # =====================================================================
-# Model Architecture Choice (Hugging Face Repository ID)
-# Common Seq2Seq choices: "google-t5/t5-small", "google-t5/t5-base", "facebook/bart-large-cnn"
-MODEL_ID = "google-t5/t5-small"
+# Model Architecture Choice (Modern Causal LLM with System/User role handling)
+MODEL_ID = "Qwen/Qwen2.5-1.5B-Instruct"
 
 # Terminal formatting codes (ANSI Escape Sequences)
 SUMMARY_COLOR = "\033[92m"  # Green
 COLOR_RESET = "\033[0m"     # White
 
-# 1. Rigorous parameter configurations adapted for T5's architectural boundaries
+# 1. Rigorous parameter configurations adapted for Causal Text-Generation
 SUMMARY_PROFILES = {
     "tldr": {
-        "max_length": 45,
-        "min_length": 15,
-        "length_penalty": 0.4,
-        "repetition_penalty": 1.3,
-        "no_repeat_ngram_size": 2,
+        "max_new_tokens": 50,
         "do_sample": False,
-        "num_beams": 1,
-        "task_prefix": "summarize: "
+        "system_instruction": "You are a precise research assistant. Provide a single, punchy, single-sentence summary of the text. Do not include introductory fluff."
     },
     "abstract": {
-        "max_length": 250,
-        "min_length": 90,
-        "length_penalty": 1.6,
-        "repetition_penalty": 1.1,
-        "no_repeat_ngram_size": 4,
+        "max_new_tokens": 250,
         "do_sample": False,
-        "num_beams": 4,
-        "task_prefix": "summarize: "
+        "system_instruction": "Provide a rigorous, formal academic abstract summarizing the core methodology, data, and conclusions of the text. Maintain an objective, structural tone."
     },
     "bullets": {
-        "max_length": 150,
-        "min_length": 50,
-        "length_penalty": 0.5,
-        "repetition_penalty": 1.6,
-        "no_repeat_ngram_size": 2,
+        "max_new_tokens": 150,
         "do_sample": False,
-        "num_beams": 4,
-        "task_prefix": "summarize into bullet points: "
+        "system_instruction": (
+            "You are an expert executive editor. Summarize the text into a tight, professional bulleted list.\n"
+            "CRITICAL CONSTRAINTS:\n"
+            "- Use telegraphic style (drop passive articles like 'the article explores', 'this paper focuses on').\n"
+            "- Begin each bullet with a strong action verb or clear noun phrase.\n"
+            "- THe list of bullets can be titled something like Key Points\n"
+            "- Keep phrases extremely concise. Eliminate parenthetical clauses and use 'e.g.' instead of 'such as'."
+        )
     },
     "synopsis": {
-        "max_length": 180,
-        "min_length": 60,
-        "length_penalty": 1.2,
-        "repetition_penalty": 1.2,
-        "no_repeat_ngram_size": 3,
+        "max_new_tokens": 200,
         "do_sample": True,
-        "temperature": 0.85,
-        "num_beams": 1,
-        "task_prefix": "summarize: "
+        "temperature": 0.75,
+        "system_instruction": "Provide an engaging, conceptual synopsis of the provided text, capturing its underlying narrative and thematic goals."
     }
 }
 
@@ -102,48 +88,45 @@ else:
 # 4. DEFERRED IMPORTS
 print("Loading core machine learning frameworks...")
 import torch
-from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
+from transformers import AutoTokenizer, AutoModelForCausalLM
 
-# 5. Initialize weights and tokenizer using the hoisted MODEL_ID constant
+# 5. Initialize weights and tokenizer using Causal LM classes
 print(f"Initializing model '{MODEL_ID}' using style profile: '{selected_style.upper()}'...")
 tokenizer = AutoTokenizer.from_pretrained(MODEL_ID)
-model = AutoModelForSeq2SeqLM.from_pretrained(MODEL_ID)
+model = AutoModelForCausalLM.from_pretrained(MODEL_ID, torch_dtype="auto", device_map="auto")
 
-# 6. Explicitly Defined Processing Pipeline
+# 6. Causal Prompting Processing Pipeline
 def run_processing_pipeline(text, style_config):
-    task_prefix = style_config.get("task_prefix", "summarize: ")
+    messages = [
+        {"role": "system", "content": style_config["system_instruction"]},
+        {"role": "user", "content": f"Document Text:\n{text[:3000]}"}
+    ]
     
-    # FILTER 1: Pre-processing
-    inputs = tokenizer(
-        task_prefix + text, 
-        max_length=1000, 
-        truncation=True, 
+    # FILTER 1: Pre-processing (Using return_dict=True to enforce 2D batched format)
+    model_inputs = tokenizer.apply_chat_template(
+        messages,
+        tokenize=True,
+        add_generation_prompt=True,
+        return_dict=True,
         return_tensors="pt"
-    )
+    ).to(model.device)
     
+    # Isolate inference arguments
     gen_kwargs = style_config.copy()
-    gen_kwargs.pop("task_prefix", None)
-    
-    if "max_length" in gen_kwargs:
-        gen_kwargs["max_new_tokens"] = gen_kwargs.pop("max_length")
-    if "min_length" in gen_kwargs:
-        gen_kwargs["min_new_tokens"] = gen_kwargs.pop("min_length")
+    gen_kwargs.pop("system_instruction", None)
 
     # FILTER 2: Inference Engine Execution
     with torch.inference_mode():
         outputs = model.generate(
-            input_ids=inputs["input_ids"],
-            attention_mask=inputs["attention_mask"],
+            **model_inputs,
             **gen_kwargs
         )
         
-    # FILTER 3: Post-processing
-    decoded_output = tokenizer.decode(outputs[0], skip_special_tokens=True)
+    # FILTER 3: Post-processing (Slice away the initial prompt matrix tokens)
+    prompt_length = model_inputs["input_ids"].shape[1]
+    generated_tokens = outputs[0][prompt_length:]
+    decoded_output = tokenizer.decode(generated_tokens, skip_special_tokens=True)
     
-    if selected_style == "bullets" and not decoded_output.startswith(("-", "*")):
-        segments = [s.strip() for s in decoded_output.split(". ") if s.strip()]
-        return "\n".join([f"• {seg.rstrip('.')}" for seg in segments])
-        
     return decoded_output.strip()
 
 # 7. Execute data flow
