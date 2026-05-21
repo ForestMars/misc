@@ -1,6 +1,7 @@
 import argparse
 import os
 import sys
+import subprocess
 import textwrap
 
 import yaml
@@ -19,6 +20,7 @@ parser = argparse.ArgumentParser(description="Summarize a binary PDF file across
 parser.add_argument("file_path", help="Path to the target PDF file on your system.")
 parser.add_argument("-f", "--format", choices=list(cfg["summary_formats"].keys()), default="tldr", help="Select summary architecture.")
 parser.add_argument("-s", "--style", choices=list(cfg["summary_styles"].keys()), default="descriptive", help="Select style matrix.")
+parser.add_argument("-a", "--audio", action="store_true", help="Narrate final presentation via macOS text-to-speech engine.")
 
 args = parser.parse_args()
 file_path = args.file_path
@@ -161,3 +163,8 @@ c_render_dashboard(
     repetition_penalty=sty_cfg["repetition_penalty"],
     inquiry_text=cfg["style_questions"][selected_style]
 )
+
+if args.audio:
+    print("\nNarrating output text via system audio channel...")
+    # Send the raw text summary to the native macOS audio layer
+    subprocess.run(["say", summary_output])
