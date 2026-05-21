@@ -1,0 +1,78 @@
+# =====================================================================
+# Matrix Engine Pure Declarative Configuration Manifest
+# =====================================================================
+
+model_id: "Qwen/Qwen2.5-1.5B-Instruct"
+
+# 1. Structural Format Constraints & Base System Instructions
+summary_formats:
+  tldr:
+    max_new_tokens: 50
+    min_new_tokens: 15
+    do_sample: true
+    system_instruction: "You are a precise research assistant. Provide a single, punchy, single-sentence summary of the text. Do not include introductory fluff."
+  abstract:
+    max_new_tokens: 250
+    min_new_tokens: 90
+    do_sample: true
+    system_instruction: "Provide a rigorous, formal academic abstract summarizing the core methodology, data, and conclusions of the text. Maintain an objective, structural tone."
+  bullets:
+    max_new_tokens: 150
+    min_new_tokens: 50
+    do_sample: true
+    system_instruction: |
+      You are an expert executive editor. Summarize the text into a tight, professional bulleted list.
+      CRITICAL CONSTRAINTS:
+      - Use telegraphic style (drop passive articles like 'the article explores', 'this paper focuses on').
+      - Begin each bullet with a strong action verb or clear noun phrase.
+      - The list of bullets can be titled something like Key Points
+      - Keep phrases extremely concise. Eliminate parenthetical clauses and use 'e.g.' instead of 'such as'.
+  synopsis:
+    max_new_tokens: 200
+    min_new_tokens: 60
+    do_sample: true
+    system_instruction: "Provide an engaging, conceptual synopsis of the provided text, capturing its underlying narrative and thematic goals."
+
+# 2. Qualitative Mathematical Sampling Configuration Matrix
+summary_styles:
+  descriptive:
+    do_sample: true
+    temperature: 0.85
+    repetition_penalty: 1.1
+    top_p: 0.95
+  interpretive:
+    do_sample: true
+    temperature: 0.65
+    repetition_penalty: 1.2
+    top_p: 0.92
+  structural:
+    do_sample: true
+    temperature: 0.45
+    repetition_penalty: 1.3
+    top_p: 0.88
+  experiential:
+    do_sample: true
+    temperature: 0.30
+    repetition_penalty: 1.3
+    top_p: 0.80
+  pragmatic:
+    do_sample: true
+    temperature: 0.15
+    repetition_penalty: 1.4
+    top_p: 0.70
+
+# 3. Harmonic Style Vocabulary Prompts
+style_nudges:
+  descriptive: "Focus on clear, observational language. Trace the explicit events and facts precisely."
+  interpretive: "Expose the implicit implications. Connect conceptual dots and clarify underlying meanings."
+  structural: "Emphasize taxonomy, sequence, and systematic organization. Highlight categorical frameworks."
+  experiential: "Ground the narrative in tangible impact, human perspective, and practical real-world realities."
+  pragmatic: "Isolate high-leverage utility. Focus exclusively on actionable mechanics, execution, and outcomes."
+
+# 4. User Interface Lens Query Mappings
+style_questions:
+  descriptive: "What happened?"
+  interpretive: "What does it mean?"
+  structural: "How is it organized?"
+  experiential: "What was it like?"
+  pragmatic: "What matters / what should be done?"
