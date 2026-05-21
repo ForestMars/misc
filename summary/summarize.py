@@ -40,6 +40,14 @@ parser.add_argument("file_path", help="Path to the target PDF file on your syste
 parser.add_argument("-f", "--format", choices=list(cfg["summary_formats"].keys()), default="tldr", help="Select summary architecture.")
 parser.add_argument("-s", "--style", choices=list(cfg["summary_styles"].keys()), default="descriptive", help="Select style matrix.")
 parser.add_argument("-a", "--audio", action="store_true", help="Narrate final presentation via macOS text-to-speech engine.")
+parser.add_argument(
+    "-w", "--what",
+    dest="extractions",
+    action="append",
+    choices=["who", "what", "why", "where", "when", "how"],
+    metavar="DIMENSION",
+    help="Extract a specific dimension. Repeatable: -w who -w what -w why"
+)
 
 args = parser.parse_args()
 file_path = args.file_path
