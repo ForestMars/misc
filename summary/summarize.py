@@ -121,8 +121,35 @@ sty_cfg = cfg["summary_styles"][selected_style]
 
 # Run processing pass using loaded settings
 summary_output = run_processing_pipeline(document_text, selected_format, selected_style)
-wrapped_output_lines = textwrap.wrap(summary_output, width=70)
-clean_wrapped_text = "\n".join(wrapped_output_lines)
+# wrapped_output_lines = textwrap.wrap(summary_output, width=70)
+
+# Bullet-safe intelligent wrapper matrix
+wrapped_lines = []
+for raw_line in summary_output.splitlines():
+    stripped = raw_line.lstrip()
+
+    # Detect markdown bullet points dynamically
+    if stripped.startswith(("- ", "* ", "• ")):
+        # Calculate how many spaces exist before the bullet icon
+        leading_indent_count = len(raw_line) - len(stripped)
+        indent_spaces = " " * (leading_indent_count + 2) # Matches item text start
+
+        # Wrap the bullet line, matching the subsequent margin depths
+        bullet_wrapped = textwrap.wrap(
+            raw_line,
+            width=70,
+            subsequent_indent=indent_spaces
+        )
+        wrapped_lines.extend(bullet_wrapped)
+
+    elif not stripped:
+        # Maintain your explicit layout spacing paragraphs intact
+        wrapped_lines.append("")
+    else:
+        # Standard paragraph blocks wrap without indents
+        wrapped_lines.extend(textwrap.wrap(raw_line, width=70))
+
+clean_wrapped_text = "\n".join(wrapped_lines)
 
 # Pass exact primitives out to the immutable view layer function
 c_render_dashboard(
