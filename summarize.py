@@ -1,3 +1,4 @@
+# How about I number all the top code sections, like cells in a notebook.
 import sys
 import os
 import argparse
@@ -14,30 +15,33 @@ COLOR_RESET = "\033[0m"     # White
 SUMMARY_FORMATS = {
     "tldr": {
         "max_new_tokens": 50,
+        "min_new_tokens": 15,
         "do_sample": True,
         "system_instruction": "You are a precise research assistant. Provide a single, punchy, single-sentence summary of the text. Do not include introductory fluff."
     },
     "abstract": {
         "max_new_tokens": 250,
+        "min_new_tokens": 90,
         "do_sample": True,
         "system_instruction": "Provide a rigorous, formal academic abstract summarizing the core methodology, data, and conclusions of the text. Maintain an objective, structural tone."
     },
     "bullets": {
         "max_new_tokens": 150,
+        "min_new_tokens": 50,
         "do_sample": True,
         "system_instruction": (
             "You are an expert executive editor. Summarize the text into a tight, professional bulleted list.\n"
             "CRITICAL CONSTRAINTS:\n"
             "- Use telegraphic style (drop passive articles like 'the article explores', 'this paper focuses on').\n"
             "- Begin each bullet with a strong action verb or clear noun phrase.\n"
-            "- THe list of bullets can be titled something like Key Points\n"
+            "- The list of bullets can be titled something like Key Points\n"
             "- Keep phrases extremely concise. Eliminate parenthetical clauses and use 'e.g.' instead of 'such as'."
         )
     },
     "synopsis": {
         "max_new_tokens": 200,
+        "min_new_tokens": 60,
         "do_sample": True,
-        "temperature": 0.75,
         "system_instruction": "Provide an engaging, conceptual synopsis of the provided text, capturing its underlying narrative and thematic goals."
     }
 }
@@ -58,19 +62,19 @@ SUMMARY_STYLES = {
         "no_repeat_ngram_size": 3,
         "top_p": 0.92
     },
-    "structural": {
-        "do_sample": True,
-        "temperature": 0.45,          # Mid-low: shifts balance toward formal structural mapping keywords
-        "repetition_penalty": 1.3,
-        "no_repeat_ngram_size": 3,
-        "top_p": 0.88
-    },
     "experiential": {
         "do_sample": True,
         "temperature": 0.30,          # Low: anchors choices down into concrete human observations
         "repetition_penalty": 1.3,
         "no_repeat_ngram_size": 2,
         "top_p": 0.80
+    },
+    "structural": {
+        "do_sample": True,
+        "temperature": 0.45,          # Mid-low: shifts balance toward formal structural mapping keywords
+        "repetition_penalty": 1.3,
+        "no_repeat_ngram_size": 3,
+        "top_p": 0.88
     },
     "pragmatic": {
         "do_sample": True,
@@ -81,6 +85,15 @@ SUMMARY_STYLES = {
     }
 }
 
+# @FIXME: Roll up into main template.
+STYLE_NUDGES = {
+    "descriptive": "Focus on clear, observational language. Trace the explicit events and facts precisely.",
+    "interpretive": "Expose the implicit implications. Connect conceptual dots and clarify underlying meanings.",
+    "structural": "Emphasize taxonomy, sequence, and systematic organization. Highlight categorical frameworks.",
+    "experiential": "Ground the narrative in tangible impact, human perspective, and practical real-world realities.",
+    "pragmatic": "Isolate high-leverage utility. Focus exclusively on actionable mechanics, execution, and outcomes."
+}
+
 # 3. Parse arguments
 parser = argparse.ArgumentParser(description="Summarize a binary PDF file across distinct algorithmic styles.")
 parser.add_argument("file_path", help="Path to the target PDF file on your system.")
@@ -89,6 +102,7 @@ parser.add_argument("-s", "--style", choices=list(SUMMARY_STYLES.keys()), defaul
 
 args = parser.parse_args()
 file_path = args.file_path
+selected_format = args.format  # <-- FIXED: Captured missing argument definition
 selected_style = args.style
 
 # 3. Subdirectory Cache Management
@@ -139,8 +153,12 @@ def run_processing_pipeline(text, format_key, style_key):
     format_cfg = SUMMARY_FORMATS[format_key]
     style_cfg = SUMMARY_STYLES[style_key]
 
-    # Construct the base text instruction with its structural format suffix
-    system_prompt = f"{BASE_SYSTEM_PROMPT}{format_cfg['suffix_prompt']}"
+    #Combine the structural instruction with the light-touch style nudge
+    base_instruction = format_cfg["system_instruction"]
+    style_nudge = STYLE_NUDGES[style_key]
+
+    # Unified Prompt Architecture
+    system_prompt = f"{base_instruction}\n\nStyle Alignment: {style_nudge}"
 
     messages = [
         {"role": "system", "content": system_prompt},
@@ -157,7 +175,6 @@ def run_processing_pipeline(text, format_key, style_key):
     ).to(model.device)
 
     # CRITICAL FIX: Merge the structural length limits and the mathematical style parameters
-    # into a single, cohesive keyword arguments dictionary for the generation engine.
     gen_kwargs = style_cfg.copy()
     gen_kwargs["max_new_tokens"] = format_cfg["max_new_tokens"]
     gen_kwargs["min_new_tokens"] = format_cfg["min_new_tokens"]
@@ -174,10 +191,7 @@ def run_processing_pipeline(text, format_key, style_key):
     generated_tokens = outputs[0][prompt_length:]
     return tokenizer.decode(generated_tokens, skip_special_tokens=True).strip()
 
-# 7. Execute data flow
-# config = SUMMARY_PROFILES[selected_style]
-# summary_output = run_processing_pipeline(document_text, config)
-#
+
 def render_matrix_dashboard(output_text, style_name, format_name, style_cfg, inquiry_text):
     """Renders a structured CLI component with strict separation of data and formatting."""
     # 1. UI Style Constants
@@ -206,9 +220,8 @@ def render_matrix_dashboard(output_text, style_name, format_name, style_cfg, inq
 
     print(template)
 
-
 # =====================================================================
-# 8. EXECUTE PASS & PARAMETRIC RENDERING
+# 7. EXECUTE PASS & PARAMETRIC RENDERING
 # =====================================================================
 STYLE_QUESTIONS = {
     "descriptive": "What happened?",
@@ -225,7 +238,7 @@ sty_cfg = SUMMARY_STYLES[selected_style]
 # 2. Run the dynamic inference engine execution pass
 summary_output = run_processing_pipeline(document_text, selected_format, selected_style)
 
-# 3. HERE IS THE CALL: It acts as the final sink for your data pipeline
+# 3. Render output via presentation layer component
 render_matrix_dashboard(
     output_text=summary_output,
     style_name=selected_style,
@@ -233,8 +246,3 @@ render_matrix_dashboard(
     style_cfg=sty_cfg,
     inquiry_text=STYLE_QUESTIONS[selected_style]
 )
-
-exit("bye")
-
-print(f"\n--- {selected_style.upper()} SUMMARY ---")
-print(f"{SUMMARY_COLOR}{summary_output}{COLOR_RESET}")
