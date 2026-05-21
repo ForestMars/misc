@@ -1,6 +1,8 @@
-import sys
-import os
 import argparse
+import os
+import sys
+import textwrap
+
 import yaml
 from pypdf import PdfReader
 
@@ -119,10 +121,12 @@ sty_cfg = cfg["summary_styles"][selected_style]
 
 # Run processing pass using loaded settings
 summary_output = run_processing_pipeline(document_text, selected_format, selected_style)
+wrapped_output_lines = textwrap.wrap(summary_output, width=70)
+clean_wrapped_text = "\n".join(wrapped_output_lines)
 
 # Pass exact primitives out to the immutable view layer function
 c_render_dashboard(
-    output_text=summary_output,
+    output_text=clean_wrapped_text,
     style_name=selected_style,
     format_name=selected_format,
     temperature=sty_cfg["temperature"],
