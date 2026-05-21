@@ -3,14 +3,29 @@ import os
 import sys
 import subprocess
 import textwrap
+import hashlib
+from pathlib import Path
 
 import yaml
 from pypdf import PdfReader
 
+# =====================================================================
+# SYSTEM CACHE STATE BOUNDARIES
+# =====================================================================
 CACHE_DIR = Path(".cache")
 PDF_TXT_DIR = CACHE_DIR / "pdf-txt"
 SUMMARIES_DIR = CACHE_DIR / "summaries"
-CONFIG_FILE = Path("matrix_config.yaml")
+
+PDF_TXT_DIR.mkdir(parents=True, exist_ok=True)
+SUMMARIES_DIR.mkdir(parents=True, exist_ok=True)
+
+def get_file_hash(target_path: str) -> str:
+    """Generate a stable unique signature from file content bytes."""
+    hasher = hashlib.sha256()
+    with open(target_path, "rb") as f:
+        for chunk in iter(lambda: f.read(65536), b""):
+            hasher.update(chunk)
+    return hasher.hexdigest()
 
 # 1. Deserialize the absolute configuration state before compiling logic
 config_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "matrix_config.yaml")
@@ -32,34 +47,80 @@ file_path = args.file_path
 selected_format = args.format
 selected_style = args.style
 
-# Subdirectory Cache Management
-script_dir = os.path.dirname(os.path.abspath(__file__))
-cache_dir = os.path.join(script_dir, ".cache")
-os.makedirs(cache_dir, exist_ok=True)
-
-base_filename = os.path.basename(file_path)
-cache_path = os.path.join(cache_dir, base_filename + ".txt")
-
-if not os.path.exists(file_path) and not os.path.exists(cache_path):
+if not os.path.exists(file_path):
     print(f"Error: Target file does not exist at path '{file_path}'")
     sys.exit(1)
 
-if os.path.exists(cache_path):
-    with open(cache_path, "r", encoding="utf-8") as f:
-        document_text = f.read()
+# Generate unique identity fingerprints for the target data asset
+pdf_hash = get_file_hash(file_path)
+results_cache_file = SUMMARIES_DIR / f"{pdf_hash}_{selected_format}_{selected_style}.txt"
+document_cache_file = PDF_TXT_DIR / f"{pdf_hash}.txt"
+
+# ---------------------------------------------------------------------
+# STAGE 1 CACHE LAYER: INSTANT COMPLED RESULTS CHECK
+# ---------------------------------------------------------------------
+if results_cache_file.exists():
+    print(f"★ Cache Hit [Stage 1/2]: Pre-compiled matrix matching (-f {selected_format} -s {selected_style}) located. Rendering view instantly.")
+    summary_output = results_cache_file.read_text(encoding="utf-8")
+
+    # Process the cached text string back through your dashboard rendering engine
+    sty_cfg = cfg["summary_styles"][selected_style]
+    wrapped_lines = []
+    for raw_line in summary_output.splitlines():
+        stripped = raw_line.lstrip()
+        if stripped.startswith(("- ", "* ", "• ")):
+            leading_indent_count = len(raw_line) - len(stripped)
+            indent_spaces = " " * (leading_indent_count + 2)
+            bullet_wrapped = textwrap.wrap(raw_line, width=70, subsequent_indent=indent_spaces)
+            wrapped_lines.extend(bullet_wrapped)
+        elif not stripped:
+            wrapped_lines.append("")
+        else:
+            wrapped_lines.extend(textwrap.wrap(raw_line, width=70))
+
+    clean_wrapped_text = "\n".join(wrapped_lines)
+
+    from matrix_utils import c_render_dashboard
+    c_render_dashboard(
+        output_text=clean_wrapped_text,
+        style_name=selected_style,
+        format_name=selected_format,
+        temperature=sty_cfg["temperature"],
+        top_p=sty_cfg["top_p"],
+        repetition_penalty=sty_cfg["repetition_penalty"],
+        inquiry_text=cfg["style_questions"][selected_style]
+    )
+
+    if args.audio:
+        print("\nNarrating output text via system audio channel...")
+        subprocess.run(["say", "--", summary_output])
+    sys.exit(0)
+
+# ---------------------------------------------------------------------
+# STAGE 2 CACHE LAYER: DOCUMENT PARSING INGESTION CHECK
+# ---------------------------------------------------------------------
+document_text = ""
+if document_cache_file.exists():
+    print("⚡ Cache Hit [Stage 2/2]: Pre-parsed document plain text located. Skipping PDF ingestion layer.")
+    document_text = document_cache_file.read_text(encoding="utf-8")
 else:
+    print("⚠ Cache Miss [Stage 2/2]: Ingesting and parsing raw binary PDF layout asset...")
     try:
         reader = PdfReader(file_path)
         extracted_pages = [page.extract_text() for page in reader.pages if page.extract_text()]
         document_text = "\n".join(extracted_pages)
         if not document_text.strip():
             sys.exit("Error: Could not extract any text.")
-        with open(cache_path, "w", encoding="utf-8") as f:
-            f.write(document_text)
+
+        # Save pristine plain-text artifact to disk
+        document_cache_file.write_text(document_text, encoding="utf-8")
+        print(f"✓ Saved pristine text layout asset to: {document_cache_file}")
     except Exception as e:
         sys.exit(f"Error reading PDF file: {e}")
 
-# 3. Deferred ML Initialization Frameworks
+# =====================================================================
+# 3. UNTOUCHED MACHINE LEARNING FRAMEWORK INITIALIZATION
+# =====================================================================
 print("Loading core machine learning frameworks...")
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM
@@ -128,7 +189,10 @@ sty_cfg = cfg["summary_styles"][selected_style]
 
 # Run processing pass using loaded settings
 summary_output = run_processing_pipeline(document_text, selected_format, selected_style)
-# wrapped_output_lines = textwrap.wrap(summary_output, width=70)
+
+# Cache the fresh inference string artifact before running dashboard layout string mutations
+results_cache_file.write_text(summary_output, encoding="utf-8")
+print(f"✓ Committed finalized summary layout asset to: {results_cache_file}")
 
 # Bullet-safe intelligent wrapper matrix
 wrapped_lines = []
@@ -171,5 +235,5 @@ c_render_dashboard(
 
 if args.audio:
     print("\nNarrating output text via system audio channel...")
-    # Send the raw text summary to the native macOS audio layer
-    subprocess.run(["say", summary_output])
+    # Send the raw text summary to the native macOS audio layer with flag insulation
+    subprocess.run(["say", "--", summary_output])
