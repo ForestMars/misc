@@ -11,7 +11,7 @@ SUMMARY_COLOR = "\033[92m"  # Green
 COLOR_RESET = "\033[0m"     # White
 
 # 1. Rigorous parameter configurations adapted for Causal Text-Generation
-SUMMARY_PROFILES = {
+SUMMARY_FORMATS = {
     "tldr": {
         "max_new_tokens": 50,
         "do_sample": True,
@@ -19,7 +19,7 @@ SUMMARY_PROFILES = {
     },
     "abstract": {
         "max_new_tokens": 250,
-        "do_sample": true,
+        "do_sample": True,
         "system_instruction": "Provide a rigorous, formal academic abstract summarizing the core methodology, data, and conclusions of the text. Maintain an objective, structural tone."
     },
     "bullets": {
@@ -84,7 +84,7 @@ SUMMARY_STYLES = {
 # 3. Parse arguments
 parser = argparse.ArgumentParser(description="Summarize a binary PDF file across distinct algorithmic styles.")
 parser.add_argument("file_path", help="Path to the target PDF file on your system.")
-parser.add_argument("-f", "--format", choices=list(SUMMARY_PROFILES.keys()), default="tldr", help="Select the summary style architecture (default: tldr).")
+parser.add_argument("-f", "--format", choices=list(SUMMARY_FORMATS.keys()), default="tldr", help="Select the summary style architecture (default: tldr).")
 parser.add_argument("-s", "--style", choices=list(SUMMARY_STYLES.keys()), default="descriptive", help="Select the summary style architecture (default: descriptive).")
 
 args = parser.parse_args()
@@ -175,8 +175,66 @@ def run_processing_pipeline(text, format_key, style_key):
     return tokenizer.decode(generated_tokens, skip_special_tokens=True).strip()
 
 # 7. Execute data flow
-config = SUMMARY_PROFILES[selected_style]
-summary_output = run_processing_pipeline(document_text, config)
+# config = SUMMARY_PROFILES[selected_style]
+# summary_output = run_processing_pipeline(document_text, config)
+#
+def render_matrix_dashboard(output_text, style_name, format_name, style_cfg, inquiry_text):
+    """Renders a structured CLI component with strict separation of data and formatting."""
+    # 1. UI Style Constants
+    DIM = "\033[2m"
+    CYAN = "\033[36m"
+    GREEN = "\033[92m"
+    RESET = "\033[0m"
+    divider = "─" * 70
+
+    # 2. Raw Data Assignments (Zero Formatting, Pure Primitives)
+    matrix_engine = style_name
+    format_type = format_name
+    temp_val = style_cfg["temperature"]
+    topp_val = style_cfg["top_p"]
+    reppen_val = style_cfg["repetition_penalty"]
+
+    # 3. Pure Presentation Layer (All Formatters Isolated Here)
+    template = (
+        f"\n{DIM}[Matrix Engine: {matrix_engine.upper()} ✕ {format_type.upper()}]\n"
+        f"[Parameters: temp={temp_val:.2f} | top_p={topp_val:.2f} | rep_pen={reppen_val:.2f}]{RESET}\n"
+        f"{CYAN}❯ Lens Inquiry: {inquiry_text}{RESET}\n"
+        f"{divider}\n"
+        f"{GREEN}{output_text}{RESET}\n"
+        f"{divider}\n"
+    )
+
+    print(template)
+
+
+# =====================================================================
+# 8. EXECUTE PASS & PARAMETRIC RENDERING
+# =====================================================================
+STYLE_QUESTIONS = {
+    "descriptive": "What happened?",
+    "interpretive": "What does it mean?",
+    "structural": "How is it organized?",
+    "experiential": "What was it like?",
+    "pragmatic": "What matters / what should be done?"
+}
+
+# 1. Fetch configurations directly from your decoupled matrices
+fmt_cfg = SUMMARY_FORMATS[selected_format]
+sty_cfg = SUMMARY_STYLES[selected_style]
+
+# 2. Run the dynamic inference engine execution pass
+summary_output = run_processing_pipeline(document_text, selected_format, selected_style)
+
+# 3. HERE IS THE CALL: It acts as the final sink for your data pipeline
+render_matrix_dashboard(
+    output_text=summary_output,
+    style_name=selected_style,
+    format_name=selected_format,
+    style_cfg=sty_cfg,
+    inquiry_text=STYLE_QUESTIONS[selected_style]
+)
+
+exit("bye")
 
 print(f"\n--- {selected_style.upper()} SUMMARY ---")
 print(f"{SUMMARY_COLOR}{summary_output}{COLOR_RESET}")
