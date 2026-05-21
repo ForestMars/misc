@@ -9,9 +9,8 @@ from pathlib import Path
 import yaml
 from pypdf import PdfReader
 
-# =====================================================================
+
 # SYSTEM CACHE STATE BOUNDARIES
-# =====================================================================
 CACHE_DIR = Path(".cache")
 PDF_TXT_DIR = CACHE_DIR / "pdf-txt"
 SUMMARIES_DIR = CACHE_DIR / "summaries"
@@ -56,9 +55,8 @@ pdf_hash = get_file_hash(file_path)
 results_cache_file = SUMMARIES_DIR / f"{pdf_hash}_{selected_format}_{selected_style}.txt"
 document_cache_file = PDF_TXT_DIR / f"{pdf_hash}.txt"
 
-# ---------------------------------------------------------------------
+
 # STAGE 1 CACHE LAYER: INSTANT COMPLED RESULTS CHECK
-# ---------------------------------------------------------------------
 if results_cache_file.exists():
     print(f"★ Cache Hit [Stage 1/2]: Pre-compiled matrix matching (-f {selected_format} -s {selected_style}) located. Rendering view instantly.")
     summary_output = results_cache_file.read_text(encoding="utf-8")
@@ -96,9 +94,7 @@ if results_cache_file.exists():
         subprocess.run(["say", "--", summary_output])
     sys.exit(0)
 
-# ---------------------------------------------------------------------
 # STAGE 2 CACHE LAYER: DOCUMENT PARSING INGESTION CHECK
-# ---------------------------------------------------------------------
 document_text = ""
 if document_cache_file.exists():
     print("⚡ Cache Hit [Stage 2/2]: Pre-parsed document plain text located. Skipping PDF ingestion layer.")
@@ -118,9 +114,7 @@ else:
     except Exception as e:
         sys.exit(f"Error reading PDF file: {e}")
 
-# =====================================================================
 # 3. UNTOUCHED MACHINE LEARNING FRAMEWORK INITIALIZATION
-# =====================================================================
 print("Loading core machine learning frameworks...")
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM
@@ -142,9 +136,7 @@ model = AutoModelForCausalLM.from_pretrained(
     device_map=device_target # Binds execution straight to your Apple Silicon layout
 )
 
-# =====================================================================
 # 4. RUNTIME PIPELINE EXECUTION ENGINE
-# =====================================================================
 def run_processing_pipeline(text, format_key, style_key):
     format_cfg = cfg["summary_formats"][format_key]
     style_cfg = cfg["summary_styles"][style_key]
@@ -182,9 +174,7 @@ def run_processing_pipeline(text, format_key, style_key):
     prompt_length = model_inputs["input_ids"].shape[1]
     return tokenizer.decode(outputs[0][prompt_length:], skip_special_tokens=True).strip()
 
-# =====================================================================
 # 5. EXECUTION & PRESENTATION SINK
-# =====================================================================
 sty_cfg = cfg["summary_styles"][selected_style]
 
 # Run processing pass using loaded settings
