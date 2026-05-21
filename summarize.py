@@ -1,81 +1,51 @@
-import sys
-import os
-import argparse
-from pypdf import PdfReader
-
-# 1. Define the parameter configurations
-SUMMARY_PROFILES = {
-    "tldr": {"max_length": 45, "min_length": 15, "length_penalty": 0.4, "repetition_penalty": 1.3, "no_repeat_ngram_size": 2, "do_sample": False},
-    "abstract": {"max_length": 250, "min_length": 90, "length_penalty": 1.6, "repetition_penalty": 1.1, "no_repeat_ngram_size": 4, "do_sample": False},
-    "bullets": {"max_length": 150, "min_length": 50, "length_penalty": 0.8, "repetition_penalty": 1.5, "no_repeat_ngram_size": 2, "do_sample": False},
-    "synopsis": {"max_length": 180, "min_length": 60, "length_penalty": 1.2, "repetition_penalty": 1.2, "no_repeat_ngram_size": 3, "do_sample": True, "temperature": 0.85}
-}
-
-# 2. Parse arguments IMMEDIATELY using fast, native code
-parser = argparse.ArgumentParser(
-    description="Summarize a binary PDF file across distinct algorithmic styles."
-)
-parser.add_argument("file_path", help="Path to the target PDF file on your system.")
-parser.add_argument("-s", "--style", choices=list(SUMMARY_PROFILES.keys()), default="tldr", help="Select the summary style architecture (default: tldr).")
-
-# If arguments are missing, this triggers an INSTANT exit before heavy imports touch RAM
-args = parser.parse_args()
-file_path = args.file_path
-selected_style = args.style
-
-# 3. Subdirectory Cache Management (Still fast, purely native file-system checks)
-script_dir = os.path.dirname(os.path.abspath(__file__))
-cache_dir = os.path.join(script_dir, ".cache")
-os.makedirs(cache_dir, exist_ok=True)
-
-base_filename = os.path.basename(file_path)
-cache_path = os.path.join(cache_dir, base_filename + ".txt")
-
-if os.path.exists(cache_path):
-    print(f"Found cached text in subdirectory. Loading '{cache_path}'...")
-    with open(cache_path, "r", encoding="utf-8") as f:
-        document_text = f.read()
-else:
-    print(f"Cache miss. Extracting binary PDF data from '{file_path}'...")
-    try:
-        reader = PdfReader(file_path)
-        extracted_pages = [page.extract_text() for page in reader.pages if page.extract_text()]
-        document_text = "\n".join(extracted_pages)
-        if not document_text.strip():
-            print("Error: Could not extract any text. The PDF might be scanned images.")
-            sys.exit(1)
-        with open(cache_path, "w", encoding="utf-8") as f:
-            f.write(document_text)
-    except Exception as e:
-        print(f"Error reading PDF file: {e}")
-        sys.exit(1)
-
-# 4. DEFERRED IMPORTS: Only load heavy ML frameworks once validation passes
-print("Loading core machine learning frameworks...")
 import torch
-from transformers import pipeline, AutoTokenizer, AutoModelForSeq2SeqLM
-from transformers.pipelines.text2text_generation import Text2TextGenerationPipeline
+from transformers import Pipeline
 
-# 5. Initialize the Pipeline
-print(f"Initializing pipeline with style profile: '{selected_style.upper()}'...")
-model_id = "google-t5/t5-small"
-tokenizer = AutoTokenizer.from_pretrained(model_id)
-model = AutoModelForSeq2SeqLM.from_pretrained(model_id)
+# We inherit directly from the official Hugging Face Pipeline base class.
+# This ensures it uses their rigorous streaming, hardware mapping, and batching.
+class AlgorithmicSummaryPipeline(Pipeline):
+    
+    def _sanitize_parameters(self, **kwargs):
+        # Maps incoming user style flags cleanly to the underlying forward pass
+        preprocess_kwargs = {}
+        forward_kwargs = {}
+        postprocess_kwargs = {}
+        
+        # Pull out generation parameters for the model filter
+        for key in ["max_new_tokens", "min_new_tokens", "length_penalty", 
+                    "repetition_penalty", "no_repeat_ngram_size", "do_sample", "temperature"]:
+            if key in kwargs:
+                forward_kwargs[key] = kwargs[key]
+                
+        return preprocess_kwargs, forward_kwargs, postprocess_kwargs
 
-summarizer = pipeline(
-    task="text2text-generation",
-    model=model,
-    tokenizer=tokenizer,
-    pipeline_class=Text2TextGenerationPipeline
-)
+    def preprocess(self, text, **preprocess_kwargs):
+        # FILTER 1: Raw text -> Token Tensor Dictionary
+        # T5 requires the task prefix string prepended
+        model_inputs = self.tokenizer(
+            "summarize: " + text, 
+            max_length=1000, 
+            truncation=True, 
+            return_tensors="pt"
+        )
+        return model_inputs
 
-# 6. Execute summary generation
-config = SUMMARY_PROFILES[selected_style]
-result = summarizer(
-    "summarize: " + document_text,
-    truncation=True,
-    **config
-)
+    def _forward(self, model_inputs, **forward_kwargs):
+        # FILTER 2: Hardware-Accelerated Inference Pass
+        # We extract target variables out of the input dictionary
+        input_ids = model_inputs["input_ids"]
+        attention_mask = model_inputs["attention_mask"]
+        
+        # Run generation loop under explicit inference memory isolation
+        with torch.inference_mode():
+            outputs = self.model.generate(
+                input_ids=input_ids,
+                attention_mask=attention_mask,
+                **forward_kwargs
+            )
+        return outputs
 
-print(f"\n--- {selected_style.upper()} SUMMARY ---")
-print(result[0]['generated_text'].strip())
+    def postprocess(self, model_outputs, **postprocess_kwargs):
+        # FILTER 3: Vector Tensors -> Clean Output String
+        decoded_string = self.tokenizer.decode(model_outputs[0], skip_special_tokens=True)
+        return decoded_string.strip()
