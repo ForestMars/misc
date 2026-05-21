@@ -132,14 +132,22 @@ print(f"Initializing model '{MODEL_ID}' using style profile: '{selected_style.up
 tokenizer = AutoTokenizer.from_pretrained(MODEL_ID)
 model = AutoModelForCausalLM.from_pretrained(MODEL_ID, torch_dtype="auto", device_map="auto")
 
-# 6. Causal Prompting Processing Pipeline
-def run_processing_pipeline(text, style_config):
+
+# 6. PARAMETER-DRIVEN PIPELINE EXECUTION (FIXED MATRIX MERGE)
+# =====================================================================
+def run_processing_pipeline(text, format_key, style_key):
+    format_cfg = SUMMARY_FORMATS[format_key]
+    style_cfg = SUMMARY_STYLES[style_key]
+
+    # Construct the base text instruction with its structural format suffix
+    system_prompt = f"{BASE_SYSTEM_PROMPT}{format_cfg['suffix_prompt']}"
+
     messages = [
-        {"role": "system", "content": style_config["system_instruction"]},
+        {"role": "system", "content": system_prompt},
         {"role": "user", "content": f"Document Text:\n{text[:3000]}"}
     ]
 
-    # FILTER 1: Pre-processing (Using return_dict=True to enforce 2D batched format)
+    # FILTER 1: Pre-processing (Tokenization & Matrix alignment)
     model_inputs = tokenizer.apply_chat_template(
         messages,
         tokenize=True,
@@ -148,23 +156,23 @@ def run_processing_pipeline(text, style_config):
         return_tensors="pt"
     ).to(model.device)
 
-    # Isolate inference arguments
-    gen_kwargs = style_config.copy()
-    gen_kwargs.pop("system_instruction", None)
+    # CRITICAL FIX: Merge the structural length limits and the mathematical style parameters
+    # into a single, cohesive keyword arguments dictionary for the generation engine.
+    gen_kwargs = style_cfg.copy()
+    gen_kwargs["max_new_tokens"] = format_cfg["max_new_tokens"]
+    gen_kwargs["min_new_tokens"] = format_cfg["min_new_tokens"]
 
-    # FILTER 2: Inference Engine Execution
+    # FILTER 2: Inference Engine Execution (Unpacking the true mathematical matrix)
     with torch.inference_mode():
         outputs = model.generate(
             **model_inputs,
-            **gen_kwargs
+            **gen_kwargs  # <-- Unpacks temperature, top_p, repetition_penalty, etc.
         )
 
-    # FILTER 3: Post-processing (Slice away the initial prompt matrix tokens)
+    # FILTER 3: Post-processing
     prompt_length = model_inputs["input_ids"].shape[1]
     generated_tokens = outputs[0][prompt_length:]
-    decoded_output = tokenizer.decode(generated_tokens, skip_special_tokens=True)
-
-    return decoded_output.strip()
+    return tokenizer.decode(generated_tokens, skip_special_tokens=True).strip()
 
 # 7. Execute data flow
 config = SUMMARY_PROFILES[selected_style]
