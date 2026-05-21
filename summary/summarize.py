@@ -7,6 +7,11 @@ import textwrap
 import yaml
 from pypdf import PdfReader
 
+CACHE_DIR = Path(".cache")
+PDF_TXT_DIR = CACHE_DIR / "pdf-txt"
+SUMMARIES_DIR = CACHE_DIR / "summaries"
+CONFIG_FILE = Path("matrix_config.yaml")
+
 # 1. Deserialize the absolute configuration state before compiling logic
 config_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "matrix_config.yaml")
 try:
