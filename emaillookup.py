@@ -1,3 +1,4 @@
+# but i also feel like what’s coming is you just ask the AI to validate the email for you
 import sys
 import smtplib
 import dns.resolver
@@ -17,18 +18,18 @@ def verify_existence(email):
         server.connect(mx_record)
         server.helo(server.local_hostname)
         server.mail('me@example.com')
-        
+
         # 3. Ask the server if the recipient exists
         code, message = server.rcpt(address_to_verify)
         server.quit()
 
         if code == 250:
-            return "✅ LIKELY REAL (Server accepted it)"
+            return "LIKELY REAL (Server accepted it)"
         else:
-            return f"❌ INVALID (Server rejected it: {code})"
+            return f"❌ ⚠️ INVALID (Server rejected it: {code})"
 
     except Exception as e:
-        return f"⚠️ UNKNOWN (Server blocked the check): {e}"
+        return f"❓ UNKNOWN (Server blocked the check): {e}"
 
 if __name__ == "__main__":
     if len(sys.argv) > 1:
