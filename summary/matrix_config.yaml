@@ -1,14 +1,12 @@
-# =====================================================================
 # Matrix Engine Pure Declarative Configuration Manifest
-# =====================================================================
-
 model_id: "Qwen/Qwen2.5-1.5B-Instruct"
+# model_id: "google/gemma-3-4b-it"
 
 # 1. Structural Format Constraints & Base System Instructions
 summary_formats:
   tldr:
-    max_new_tokens: 50
-    min_new_tokens: 15
+    max_new_tokens: 150
+    min_new_tokens: 50
     do_sample: true
     system_instruction: "You are a precise research assistant. Provide a single, punchy, single-sentence summary of the text. Do not include introductory fluff."
   abstract:
@@ -28,8 +26,8 @@ summary_formats:
       - The list of bullets can be titled something like Key Points
       - Keep phrases extremely concise. Eliminate parenthetical clauses and use 'e.g.' instead of 'such as'.
   synopsis:
-    max_new_tokens: 200
-    min_new_tokens: 60
+    max_new_tokens: 777
+    min_new_tokens: 444
     do_sample: true
     system_instruction: "Provide an engaging, conceptual synopsis of the provided text, capturing its underlying narrative and thematic goals."
 
@@ -60,6 +58,11 @@ summary_styles:
     temperature: 0.15
     repetition_penalty: 1.4
     top_p: 0.70
+  fiction:
+    do_sample: true
+    temperature: 0.7
+    repetition_penalty: 1.1
+    top_p: 0.9
 
 # 3. Harmonic Style Vocabulary Prompts
 style_nudges:
@@ -68,6 +71,7 @@ style_nudges:
   structural: "Emphasize taxonomy, sequence, and systematic organization. Highlight categorical frameworks."
   experiential: "Ground the narrative in tangible impact, human perspective, and practical real-world realities."
   pragmatic: "Isolate high-leverage utility. Focus exclusively on actionable mechanics, execution, and outcomes."
+  fiction: "Summarize the plot. Name the main characters and describe what happens to them. Do not analyze themes, structure, or literary technique. Do not use words like 'explores', 'examines', or 'delves into'. Tell me what happens in the story."
 
 # 4. User Interface Lens Query Mappings
 style_questions:
@@ -76,3 +80,18 @@ style_questions:
   structural: "How is it organized?"
   experiential: "What was it like?"
   pragmatic: "What matters / what should be done?"
+  fiction: "What happens in this story?"
+
+# 5. Audio Interface Styles
+cache:
+  audio_max_mb: 500
+  audio_max_days: 30
+
+audio:
+  voice: "af_heart"
+  speed: 1.0
+
+American English females (af_): af_heart, af_bella, af_aoede, af_alloy, af_jessica, af_kore, af_nicole, af_nova, af_river, af_sarah, af_sky
+British English females (bf_): bf_emma, bf_isabella, bf_alice, bf_lily
+American English males (am_): am_adam, am_echo, am_eric, am_fenrir, am_liam, am_michael, am_onyx, am_puck, am_santa
+British English males (bm_): bm_daniel, bm_fable, bm_george, bm_lewis
