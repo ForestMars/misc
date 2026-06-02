@@ -1,48 +1,101 @@
-// pull-feed.ts (Run with: bun pull-feed.ts)
+// pull-feed.ts (Run directly with: bun pull-feed.ts)
+import tls from "node:tls";
 
-const SUBSTACK_BASE = "https://antimemetics.blog";
-// Substack's public API endpoint for raw post lists
-const API_URL = `${SUBSTACK_BASE}/api/v1/posts/?limit=15&offset=0`;
+const HOST = "antimemetics.blog";
+const TARGET_PATH = "/api/v1/posts/?limit=15";
 
-async function getTitles() {
-  console.log("🚀 Initializing connection to Substack API...");
-  console.log(`📡 Target: ${API_URL}`);
+// A hardened modern browser cipher list to help break through the WAF fingerprinting layer
+const CHROME_CIPHERS = [
+  "TLS_AES_128_GCM_SHA256",
+  "TLS_AES_256_GCM_SHA384",
+  "TLS_CHACHA20_POLY1305_SHA256",
+  "ECDHE-ECDSA-AES128-GCM-SHA256",
+  "ECDHE-RSA-AES128-GCM-SHA256",
+  "ECDHE-ECDSA-AES256-GCM-SHA384",
+  "ECDHE-RSA-AES256-GCM-SHA384",
+  "ECDHE-ECDSA-CHACHA20-POLY1305",
+  "ECDHE-RSA-CHACHA20-POLY1305",
+].join(":");
 
-  // Create a timeout controller so it never hangs silently
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => {
-    console.log("⚠️  Network request exceeded 5 seconds. Aborting.");
-    controller.abort();
-  }, 5000);
+function fetchWithRawSocket(): Promise<string> {
+  return new Promise((resolve, reject) => {
+    console.log("📡 Opening raw TLS stream directly to edge servers...");
 
-  try {
-    console.log("🔄 Fetching payload (mimicking standard browser headers)...");
-    const response = await fetch(API_URL, {
-      signal: controller.signal,
-      headers: {
-        "User-Agent":
-          "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-        Accept: "application/json",
-        Referer: SUBSTACK_BASE,
+    const socket = tls.connect(
+      {
+        host: HOST,
+        port: 443,
+        servername: HOST,
+        ciphers: CHROME_CIPHERS,
+        minVersion: "TLSv1.2",
+        maxVersion: "TLSv1.3",
+        honorCipherOrder: true,
       },
-    });
+      () => {
+        console.log(
+          "🔓 Handshake achieved. Injecting HTTP/1.1 frame manually...",
+        );
 
-    clearTimeout(timeoutId);
-    console.log(
-      `📥 Response received. Status: ${response.status} ${response.statusText}`,
+        // Construct a clean, minimal browser wire frame
+        const httpRequest = [
+          `GET ${TARGET_PATH} HTTP/1.1`,
+          `Host: ${HOST}`,
+          "User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+          "Accept: application/json",
+          "Accept-Language: en-US,en;q=0.9",
+          "Connection: close",
+          "\r\n",
+        ].join("\r\n");
+
+        socket.write(httpRequest);
+      },
     );
 
-    if (!response.ok) {
-      throw new Error(
-        `Cloudflare or Substack edge blocked the request. Status: ${response.status}`,
-      );
+    let rawData = "";
+    socket.setEncoding("utf8");
+
+    socket.on("data", (chunk) => {
+      rawData += chunk;
+    });
+
+    socket.on("end", () => {
+      resolve(rawData);
+    });
+
+    socket.on("error", (err) => {
+      reject(err);
+    });
+
+    // Safety guard to kill dead hangs
+    socket.setTimeout(6000, () => {
+      socket.destroy();
+      reject(new Error("Socket connection dropped via 6s timeout layer."));
+    });
+  });
+}
+
+async function run() {
+  try {
+    const rawResponse = await fetchWithRawSocket();
+
+    // Separate the raw HTTP headers from the JSON payload body
+    const headerDelimiter = "\r\n\r\n";
+    const delimiterIndex = rawResponse.indexOf(headerDelimiter);
+
+    if (delimiterIndex === -1) {
+      throw new Error("Invalid protocol boundary in socket stream.");
     }
 
-    console.log("🧠 Parsing JSON payload...");
-    const posts = await response.json();
+    const body = rawResponse.substring(delimiterIndex + headerDelimiter.length);
 
-    if (!Array.isArray(posts) || posts.length === 0) {
-      console.log("❌ No posts found in the returned array.");
+    console.log("🧠 Decoding data payload...");
+    const posts = JSON.parse(body);
+
+    if (!Array.isArray(posts)) {
+      console.log(
+        "⚠️ Content layout did not return a standard post list array.",
+      );
+      console.log(body.substring(0, 300));
       return;
     }
 
@@ -52,19 +105,11 @@ async function getTitles() {
     });
     console.log("---------------------------\n");
   } catch (error: any) {
-    clearTimeout(timeoutId);
-    console.error("\n💥 Execution Failed:", error.message);
-
+    console.error("\n💥 Socket Level Failure:", error.message);
     console.log(
-      "\nAlternative: Substack is aggressively fingerprinting Bun's fetch.",
-    );
-    console.log(
-      "Run this clean curl alternative instead to bypass the TLS layer entirely:\n",
-    );
-    console.log(
-      `curl -s "${API_URL}" | bun -e 'import("fs").readFileSync(0, "utf-8").then(d => JSON.parse(d).forEach((p, i) => console.log(\`\${i+1}. \${p.title}\`)))'`,
+      "If this timed out, the edge has flagged your residential block's IP subnet entirely.",
     );
   }
 }
 
-getTitles();
+run();
