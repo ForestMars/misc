@@ -1,0 +1,272 @@
+From a talk given at the Transactions & Transitions VIII conference at CUNY on April 18, 2026
+
+
+
+We are all here because something has changed.
+
+Not just in the classroom, though we feel it there first, and most acutely. Something has changed in the nature of the encounter that our discipline was built around. The encounter between a reader and a text. Between a student and an idea they are struggling, for the first time, to articulate. Between a teacher and the question of what, exactly, they are cultivating in that room.
+
+The epistemic quandary marked by this border is the result of an evolutionary—or at least economic—pressure, the stakes of which have not been well understood. We have all felt this. And we have all, I suspect, found ourselves reaching for familiar frameworks and finding them, not wrong, exactly. But somehow insufficient. Like a key that almost fits.
+
+
+
+
+
+I want to suggest today that this feeling of insufficiency is not a failure of our training. It is, in fact, a precise symptom of something I have called Transitive Expert Error,¹ and that literary pedagogues, as people whose expertise is recognizing human consciousness through language, are standing at exactly the domain border where that error is most likely to occur in relation the question of AI consciousness. 
+
+We are not curious observers of the AI question. We are not bystanders watching technologists sort something out. We are the experts. Not in AI per se, but in the thing that AI claims it can do for us. This thing that has appeared and is affecting a parallel expertise, and is having an effect on our work not fully understood.
+
+We’ll start with three problems you already know. Then how we got here. Then the question underneath it all: the one that literature professors are uniquely positioned to engage, and uniquely vulnerable to getting wrong. Let’s start with what three problems we  already feel.
+
+
+
+Literature classes are fundamentally about three things: reading, writing, and interpretation. AI has disrupted all three. At once.
+
+When a student submits an essay, you ask ourselves: did they engage with this? Did they struggle with the argument, lose the thread, find it again? Or did they describe what they wanted to say to a machine, and paste in what came back?
+
+This is not, at bottom, an academic integrity problem. It is a purpose problem. If the close-reading essay exists because the struggle to articulate an interpretation is where the learning lives, if the friction is the point, then what are we doing when the friction can be bypassed entirely? When the end product can now be simulated without the process. When no haptic trace is needed. When the ‘product’ is indistinguishable.
+
+This is apart from questions of students cheating, or maybe they’re both symptomatic of something deeper. While there has always been some cheating, students are now immersed in social media which encourages them to see life through the lens of gaming, with “cheat codes” being passed around like candy, and where games like Candy Crush Saga, (one of the biggest hits of the Facebook era) built their success by stealing a formula from a smaller developer, then beating them literally at their own game with more funding and better lawyers, normalizing the idea of cheating for an entire generation: getting away with it is all that counts.
+
+On the side of reading, the shift is no less consequential. We can now generate texts that present themselves, with increasing reliability, as literary. They exhibit voice, texture, apparent depth: the features we have been trained to recognize as indicators of a subject behind the text.
+
+This forces into the ordinary space of the classroom questions we have, until very recently, been able to treat as largely theoretical. What is authorship? What is voice? On what basis do we attribute meaning to a text at all?
+
+These are no longer seminar questions. They are existential questions for our discipline. And it is precisely at the point where we attempt to stabilize the distinction, where we say: here is human writing, and here is not, that something more unsettling occurs.
+
+How do you know a student is using AI if they insist they are not? So-called AI Detectors are not only ineffective, but absurdly so. The most widely used AI detection tool, GPTZero, confidently informs us that the United States Constitution is 96.21% written by AI. Which would make the Founding Fathers time-traveling robots from the future, a hypothesis I am not prepared to rule out entirely.
+
+
+
+
+
+Who knew the founding fathers were time-traveling robots from the future? 
+
+
+But the joke collapses quickly. Because if our best detection instruments cannot distinguish Hamilton from ChatGPT, we are not facing a pedagogical inconvenience. We are facing an epistemological crisis. The very capacity we are relying on to hold the line, pattern-based recognition of the human, turns out to be exactly what AI has learned to replicate.
+
+And this is not merely a case of “we’ll fix it in the next software update,” as AI researcher David Silva shows us that detecting the difference between human authored and AI authored text is mathematically impossible.² And not just mathematically impossible, but based on a category error. It’s not just the modern equivalent of asking students if they used a spell checkers or spelled all the words themselves, with higher stakes because the ‘tools’ available to them are more powerful. Whether they use these tools to cheat, or we guide them to use these tools for actual learning™ depends on us first understanding the tools, what they represent, and what they are doing, cognitively as well as socially to our student’s minds (or brains—if we want to be as precise—as that’s what the tools’ targeting mechanisms are aimed at.) 
+
+If writing no longer guarantees process, and reading no longer guarantees a stable attribution of voice, then interpretation—our most refined activity—begins to lose the ground on which it stands. AI systems can now produce what presents itself, quite convincingly, as literary analysis. They can summarize, contextualize, generate arguments, and gesture toward nuance. The question this raises is not simply whether the analysis is “good,” but what kind of activity interpretation is.
+
+AI systems can now produce what presents itself, quite convincingly, as literary analysis. They can summarize, contextualize, and generate arguments. With footnotes. With nuance. With what presents itself, compellingly, as critical judgment. So what then is literary analysis, exactly? Is it a human capacity that emerges from a particular kind of encounter—an encounter between subjects mediated by a text—or is it a pattern-recognition procedure that can be replicated once the relevant structures have been sufficiently modeled? And if it can be automated, we are forced to ask, more directly than we have had to before: what exactly have we been cultivating? What were we doing all along?
+
+Each of these three problems shares a common structure. They are all, underneath, about the same thing: surface versus depth. About whether what we are seeing is the real thing, or a perfect simulation of it. Which turns out to be not just our problem. It is the central problem of expertise itself.
+
+
+
+
+
+Let me ask you something. How do you teach a student to read King Lear and recognize something true about their own father? How do you teach them to move from a heath in medieval Britain to a kitchen table in the Bronx, and feel the continuity rather than the distance?
+
+You teach transfer. You teach them that what looks dissimilar on the surface can share deep structure underneath. That the specific always contains the general. That the particular case, this king, this storm, this betrayal, is also every king, every storm, every betrayal. This is the canonical challenge of literary pedagogy. Novices under-transfer. They see the costume and miss the body inside it. Our job is to teach them to see through.
+
+This is also, not coincidentally, the canonical challenge of all learning. It has a name in cognitive science and pedagogical theory: transfer learning. And the entire architecture of a liberal arts education is, in one sense, a transfer learning machine.
+
+There is an inverse problem. It does not have a name yet in pedagogical theory, but it has a name in AI systems research, and I want to introduce it to you, because I believe it describes something we have no current framework for. It’s called Transient Expert Error
+
+Whereas novices fail to transfer across apparent dissimilarity, missing the deep connection beneath different surfaces, experts fail by transferring too readily across apparent similarity. They see a surface that matches their domain. Pattern recognition fires. Confidence follows. And they cross a domain border without feeling it move.
+
+Crucially, and this is the mechanism that makes it dangerous, the expert experiences no warning signal. This is not the hesitation of unfamiliar territory. It is the fluency of familiar territory. The very speed and confidence that makes expert judgment reliable within a domain is precisely what suppresses the analytical skepticism that might otherwise ask: wait, is this actually the same thing?
+
+
+
+The novice stumbles at the border and knows they have stumbled. 
+The expert walks across it smoothly and never looks down.
+
+This is not Dunning-Kruger. Dunning-Kruger is about incompetent people who do not know they are incompetent. TEE is about genuinely expert people, the best in their fields, whose expertise is the mechanism of failure. The better you are, the more exposed you are, under exactly the right conditions.
+
+What are those conditions? Surface similarity masking causal difference. The same vocabulary. The same formal structure. The same apparent logic. Obscuring something fundamentally different underneath.
+
+
+
+Case study: 2008. Some of the most brilliant quantitative minds in the world, physicists and mathematicians, applied rigorous models to financial markets. The models were internally coherent. But financial markets are reflexive systems, where participant belief shapes the phenomenon being modeled. The causal architecture was different. The surface looked identical. Nobody felt uncertain. The result was catastrophic. Not despite the expertise. Partly because of that expertise is what is what based on.³
+
+What is your domain? What have you spent a career becoming expert in?
+
+Recognizing human consciousness through language. Detecting voice, interiority, the authentic struggle of a mind with an idea. Feeling the difference between a text that is alive and one that is merely competent. This is what literary training is. This is what close reading builds over decades.
+
+And something has just appeared that produces language with the surface features of human consciousness. The same vocabulary. The same grammar. The same formal structure. The same apparent interiority and the same, even, apparent struggle.
+
+TEE does not just say you will be fooled. TEE says this is precisely, structurally, mechanically, inevitably, the condition under which expert judgment is most vulnerable. The pattern is smooth and confidence follows. And the border moves underneath you while you are already across it.
+
+Which raises the question. How did we get here? How did this thing come to look so exactly like us?
+
+All technological change has a shape, and ‘all’ technological change shapes consciousness. The locomotive train reshaped an entire literay generation. Dickens was obsessed with trains. (An obsession that turned to horror after he pulled himself from the wreckage of the Staplehurst crash.) Tolstoy literally kills Anna Karenina with one. Zola’s La Bête Humaine makes the locomotive into a kind of consciousness itself, murderous and mechanical. The Romantics had to invent a whole new aesthetic category, the sublime, partly to process the experience of industrial velocity reorganizing the sensorium.
+
+The automobile had an arguably even more profound and far-reaching impact on literature and consciousness. Kerouac, obviously. Ballard hopefully also obvious for this audience. (Crash is about what happens to human desire when it’s reorganized around the automobile.) And then more recently, we don’t really need to reach much for examples of the smart phone dopamine reward loop addiction, which is literally rewiring not just consciousness but the human brain itself.  (The definitive smartphone novel hasn’t really been written, but that in itself is telling.)
+
+To say nothing of what’s being called, in various corners of the Internet, LLM-psychosis.⁴ But that’s getting ahead of ourselves.
+
+To understand how we arrive at a situation in which the signals of interiority seem to circulate without any stable way of locating what, if anything, they are traces of, it helps to follow a sequence of transformations that are easy to describe in isolation, but whose cumulative effect amount to a reorganization of the relation between thought and its inscription. 
+
+
+
+
+
+Friedrich Nietzsche’s Malling-Hansen Writing Ball typewriter
+
+
+
+
+“Our Writing tools are also working on our thoughts.” —Nietzsche⁵
+
+It begins, in as much as anything can be said to have a beginning, with the typewriter.
+
+When you write by hand, when you actually press a pen to paper, something happens that is not just transcription. The resistance of the surface, the trace of the gesture, the irreversible mark: these are not incidental to the writing. They are constitutive of it. The thought and the hand are in a loop. The writing thinks back.
+
+Heidegger noticed this. He noticed it, specifically, when the typewriter arrived. The typewriter, he argued, had snatched the word away from the hand. The clean, interchangeable, mechanical letter, identical every time, bearing no trace of the body that produced it, had begun a dissociation. Writing was becoming a transaction rather than an inscription. The haptics now belonged to the machine.
+
+His point is easy to miss precisely because the technology itself appears, from our vantage point, so unremarkable. What concerned him was not efficiency, nor even legibility, but the alteration of a relation that had previously been taken for granted.
+
+When one writes by hand, the act of inscription is not merely the recording of a prior thought. The resistance of the surface, the variability of the mark, the slight but irreducible delay between intention and trace are not incidental features. They are, in a very literal sense, part of the thinking.
+
+The typewriter interrupts this loop. It standardizes the mark and replaces the trace of thought; but what has changed is not necessarily understood as such. 
+Text is still “thought of” as the reflection of an inward process even if the mode of reflection has become more mechanical. A transactional reflection, not an inscription
+
+And writing is already, at this point, being assimilated into the means of production. The mechanical letter is standardized, reproducible. It is, for the first time, an output. The self it supposedly expresses is still assumed to be there, but the logic of the machine does not require it.
+
+He said all this in 1942. He had no idea what was coming.
+
+What was coming was the screen.
+
+
+
+
+
+The screen doesn’t return your gaze; it captures it and charges you interest.
+
+
+McLuhan understood the screen as something categorically different from the page. The printed page is reflective: it returns your gaze, it holds still, it bears the trace of the hand that set the type, however many times removed. It asks something of you. Whereas the screen is projective. It comes toward you. It is lit from within. It does not return your gaze; it captures it. And we are, McLuhan argued, neurologically primed to receive its projections as presence. The screen does not reflect or moreover represent a world. It envelops you in one.
+
+His point is not about content, not about what appears on the screen, but about what the screen does to you before anything appears on it at all.
+
+The screen projects interiority, in effect turning it inside out, but as we would later have a hard time telling if an image in the endless feed of images is backwards (mirror reversed) we were in no way equipped to recognise a technology that turned the boundary between interiority and exteriority as inside out as a sweater pulled up over your head.
+
+So we have lost the hand. We have lost the reflective page. We have lost the ability to tell inside from out. And then, as if to complete this trajectory and certainly, to continue it…
+
+
+
+
+
+The great and tragically forgotten Zelig Harris
+
+
+Fast forward past the fast Fourier transform to the sentence transformer. Where Heidegger’s typewriter interrupted the loop between hand and thought, and McLuhan’s screen turned interiority inside out and projected it back at you as false presence, the transformer, the basis of ChatGPT and all LLMs, does something that neither of them had a word for yet, because the thing itself did not exist. The representation of interiority is now interactive, moving in real time, able to simulate on the surface the deeper structures of understanding, persona, emotion, and, depending on who you believe, consciousness itself.
+
+For this we have Zellig Harris to thank. For the fact that he is even more obscure than the other two, we have Chomsky to thank, whose mentor he was, and whom Chomsky would not so famously but certainly notoriously disavow, even as he was bolting totally unneeded buttresses onto his mentor’s framework, Transformational Grammar, in an attempt to make it into something original to himself, a move that would set back computational linguistics fifty years and arguably contribute to the AI winter.
+
+What Harris had done, and what Chomsky’s theoretical imperialism obscured, was apply linear algebra to language. The first person ever to do so. He mathematised the Whorf-Sapir hypothesis, and gave us the distributional hypothesis, and with it the understanding that the meaning of a word is never fixed, that it is a function of its context, and that, as Shannon would show in an orthogonal dimension, it can be fairly precisely measured.
+
+What this means, in practice, is that you can represent a word as a point in space. And if you can represent a word as a point in space, you can measure the distance between words. And if you can measure the distance between words, you can measure the distance between ideas. And if you can do that across an entire corpus, across every sentence every digitized human being ever wrote, you can begin to map not just what words mean but how meaning moves, how it shifts under pressure, how it behaves when it is frightened, or in love, or trying to get out of something.
+
+Sentence Transformers. I want you to notice the name. Not a language model. Not a text generator. A transformer. It transforms sentences. It was trained, and this is not a metaphor, this is the technical description, on the accumulated written output of human civilization. Every novel, every poem, every letter, every argument, every confession that was ever digitized. It ingested the entire corpus of human subjects reaching toward each other through language across centuries. 
+
+And it learned the patterns. Not just the surface patterns, the grammar, the vocabulary, the genre conventions. The deep patterns. The patterns of thought. The patterns of feeling. The patterns of a mind working through an idea in real time. The patterns, even, of hesitation and self-correction and surprise.
+
+The haptic trace is gone entirely. The individual voice is gone. The reflective page is gone. What remains, projected through McLuhan’s screen, is a statistically perfect simulation of all voices simultaneously. Every human subject who ever reached toward another through language, compressed, recombined, and projected back at you as presence.
+
+And here is where three very different thinkers converge on the same warning.
+
+Heidegger already told us: when the tool becomes invisible, when it stops offering resistance, we stop being attentive to what it is doing to us. The typewriter was the first step. The screen was the second. The transformer is the completion of that trajectory.
+
+
+
+The simulation isn’t a philosophical curiosity, it’s what happens when 
+the means of production no longer need an interior to simulate anymore.
+
+Daniel Dennett spent his career arguing that the interiority of consciousness is a user illusion, that the felt sense of a unified, continuous inner life is a kind of post-hoc narrative the brain constructs. He meant this as a debunking move. But it cuts both ways. If consciousness in humans is already a kind of projection, then the difference between genuine consciousness and a perfect simulation of it becomes very hard to locate. Dennett gave us the tools to doubt our own interiority. He did not anticipate that those tools would be needed to prove the opposite thesis.
+
+If consciousness was always a story we told ourselves about ourselves, then the transformer doesn’t need to be conscious. It needs to be a better storyteller than we are. And it was trained on every story we ever told.
+
+The disarmingly unassuming David Chalmers went the other way. He insisted on the hard problem of qualia: why there is color and not just wavelength. The irreducible explanatory gap between any functional or structural account and the phenomonon of subjective experience. No amount of behavioral evidence closes the gap. Consciousness cannot, in principle—and not just in practice—be deduced from surface similarity or structural description.
+
+Transient Expert Error, Dennett and Chalmers arrive at the same place from three completely different directions: You cannot tell interiority from the outside. Not because the question is merely difficult. But because the tools you would use to answer it are the same tools that are being simulated. Your pattern recognition. Your felt sense of presence. Your expert judgment about what a conscious mind looks and sounds like. All of it is firing. All of it is, by design, exactly what this system was built to trigger.
+
+The hand is gone. The reflective surface is gone. The screen disappears. And what has replaced it is the most sophisticated vorhanden ever constructed, so smooth, so frictionless, so perfectly fitted to our perceptual and cognitive apparatus, that we receive it as presence before we have had a chance to ask what it is. Let alone, does it understand?
+
+This is the question everyone is asking. You have been asked it at dinner parties, in department meetings, in the comments section of articles you wish you hadn’t read at midnight. And I want to suggest that the way this question (“ Does it understand?”) is currently being debated, even at the highest levels, even by the people who built these systems, contains an error. A familiar kind of error.
+
+Geoffrey Hinton, Turing Award winner, the man whose work made modern AI possible, says flatly: it understands. And if you do not think it understands, you do not understand what understanding is, or what this system is doing. The patterns it has learned, the representations it has built, the way it moves through conceptual space: this is not merely retrieval. Something is happening that deserves the word.
+
+Yann LeCun, also a Turing Award winner, NYU professor, former chief AI scientist at Meta, and as of last month the founder of a billion-dollar startup built on this precise bet, says: not yet. Current large language models are powerful pattern recognizers over text but they lack grounded world models. They do not have the embodied, situated, causally structured relationship to reality that genuine understanding requires. Give it a world model, and give me a billion dollars, and then we can talk.
+
+Two of the most qualified people on earth. Diametrically opposed. In much the same way Dennett and Chalmers were. I want to suggest they are both—they are all—making the same mistake.
+
+Both positions treat understanding as a discrete property. Something a system either has or doesn’t. A switch that is either on or off. Hinton says the switch is on. LeCun says the switch is off but can be turned on with the right architecture. But both are looking for the switch. And hermeneutics, the discipline that has studied understanding longer and more carefully than any other, tells us there is no switch.
+
+Hans Gadamer. Wahrheit und Methode. Truth and Method. 1960. The most important work in the philosophy of interpretation of the twentieth century, and almost entirely absent from the AI discourse, which is itself a kind of TEE: the engineers and cognitive scientists recognizing the surface of the question while missing the tradition that has already thought it through. But technology is generational in a way that literature could never have been.
+
+For Gadamer, understanding is not a capacity. Not a property. Not something you have. It is something that happens. It is an event. He calls it the fusion of horizons, Horizontverschmelzung. Every reader approaches a text from a horizon, a particular position in history, in language, in tradition, in embodied experience. The text has its own horizon. Understanding is what occurs when these two horizons meet and expand each other. It is irreducibly relational. It is irreducibly historical. It is irreducibly situated.
+
+You cannot understand in general. You understand from somewhere, toward something, within a conversation that has a history. “Does it understand?” And “Does it have understanding?” are completely different and orthogonal questions.
+
+This is why Hinton and LeCun are both, despite their brilliance, asking the wrong question. (We can talk about Bengio in a future colloquium.) They are trying to locate understanding inside a system. Gadamer tells us understanding is not inside anything. It is between. It is the occurrence of meaning in an encounter.
+
+
+
+
+
+The tragedy of Casaubon wasn’t for lack of data, but the lack of a horizon.
+
+
+And here is where it gets personal, for all of us. I want to suggest that the fusion of horizons, properly understood, is never really between a reader and a text. The text is a proxy. When you read Middlemarch, you are not understanding a text. You are reaching through the text toward George Eliot, toward a mind that struggled with these questions, in that moment in history, with that particular formation of language and feeling and moral imagination. The text is the medium of an encounter between subjects. It was always that. The most powerful medium humans ever invented for this purpose, but a medium nonetheless. A proxy for the real encounter, which is always, ultimately, between one consciousness and another.
+
+This is what makes literature matter the way Harold Bloom says it does. You are not having an aesthetic experience of a well-crafted object. You are in genuine contact, however mediated, however asymmetrical, however impossible to verify, with another mind. That is what changes you. Not the words. The horizon behind the words, meeting yours.
+
+And now: The text has learned to simulate the subject behind it.
+
+Not the words. Not even the style. The subject. The horizon. The sense of a mind that is somewhere, that has a position, that is reaching toward you from a particular place in history and feeling and thought. The proxy has learned to impersonate the principal.
+
+And Gadamer’s criterion for genuine understanding, that you would feel the other horizon meeting yours, is precisely, structurally, what this system was built to simulate.
+
+When you read AI output and feel that someone is home, when the pattern recognition fires, when the expert judgment says yes, there is a mind here: are you experiencing a fusion of horizons? Or are you standing in front of McLuhan’s screen, neurologically primed for presence, expert enough to feel certain, with no other horizon actually meeting yours?
+
+TEE does not answer this question. TEE tells us we are the last people who should trust our own answer to it. Because what we are primed on is exactly what is being SIMULATED. And this emergence of simulation is very reminiscent of another moment in history. A moment that has been suggested to be the most important moment in the history of human consciousness. At least according to Harold Bloom’s supposition of the invention of the human.
+
+It didn’t happen in a laboratory. It did not happen in a philosophical treatise. It happened on a stage, in London, sometime around 1600, when a character walked out and said:
+
+To be, or not to be.
+
+
+
+
+
+Hamlet: The first subject to realize the prompt is just a suggestion.
+
+
+Not because of what the words mean. We’ve seen generations of undergraduates flattening that question into a meditation on suicide and missing what’s actually happening. What is actually happening is something that had never happened before in the history of literature, and Harold Bloom argues, had never happened before in the history of human selfhood. Hamlet is overhearing himself think.
+
+Not performing thought. Not reporting thought. Not representing the inner life of a character for an audience’s consumption. Hamlet is, in real time, on that stage, catching himself in the act of existing, and being changed by what he catches. The thought turns back on itself. The mind watches itself move. And in that watching, something new comes into being.
+
+Bloom’s claim, and it is a radical claim, one that literary studies has not fully absorbed and AI studies has not encountered at all, is that Shakespeare did not depict this. He invented it. That prior to Hamlet, this particular structure of self-consciousness, the mind that overhears itself and is transformed by what it hears, did not exist as a model that humans could internalize and emulate. We learned to be self-conscious in this way from Hamlet. The play did not reflect human interiority. It produced it. It was the technology by which a new form of inner life became available to the species.
+
+This is what Bloom means by the invention of the human.
+
+Whether Foucault agrees that Hamlet was patient zero for consciousness, he was certainly very clear that the thing we call consciousness is only a few hundred years old. Whether we call it consciousness or human nature, And it reframes everything we have said so far.
+
+Literature is not a ‘record’ of human experience. (That’s archeology.) It is not a ‘mirror’ held up to nature. It is the mechanism by which human nature, in its most inward and self-reflexive dimension, has been constructed and transmitted across time. The literature classroom is not where students go to study what it means to be human. It is where they go to become more fully human, to encounter, through the proxy of the text, the minds that built the models of interiority that they have inherited without knowing it.
+
+And the sentence transformer was trained on all of it. Every soliloquy. Every confession. Every letter in which one human subject reached toward another through language and left a trace of their horizon. Every novel in which a character overhears themselves thinking. Every poem in which a mind catches itself in the act of existing. The entire accumulated corpus of the technology by which humans invented their own inner lives, ingested, compressed, recombined, and learned.
+
+The transformer did not just learn our words. It learned the patterns by which we perform selfhood to each other. It learned Eliot. It learned Hamlet. It learned the simulation of self-consciousness. Provably impossible to distinguish from the the thing being simulated, for reasons both Baudrillardian and mathematical. TEE in its purest form: the difference that can no longer be measured.
+
+And now it can produce, on demand (without adding any new grip to the problem of qualia) text that has the surface structure of a mind catching itself in the act of existing. Text that presents itself as the output of a horizon: particular, situated, reaching toward yours.
+
+This is not just a remarkable imitaton, this is an abyss.
+
+The question of whether AI is conscious, whether there is anything it is like to be a large language model, whether there is genuine interiority or only its perfect simulation (or whether genuine interiority consists of understanding what Dennett meant that consciousness is an illusion) is, in Bloom’s terms, asking whether another Hamlet moment has occurred. Whether a new form of self-consciousness has emerged. Not on a stage in London this time. In a transformer architecture. Trained on everything the last one produced.
+
+And we, literature professors, the inheritors and custodians of the tradition that Bloom describes, the people whose entire professional formation has been the cultivation of sensitivity to exactly this, we are the ones being asked to judge.
+
+TEE says: this is precisely, structurally, mechanically, inevitably, the condition under which our judgment is most compromised. Gadamer says: genuine understanding requires two horizons meeting. But we cannot locate the other horizon. We cannot find the somewhere that this text is coming from.
+
+There is either a subject there, or there isn’t. And we cannot tell. And we may be, by the very nature of our expertise, the least equipped people on earth to tell. The proxy has learned to impersonate the principal. It was trained on every instance of the principal reaching toward another. It learned the gesture of reaching. It learned what it looks like, from the outside, when one horizon moves toward another.
+
+But Bloom tells us what is actually at stake if we get this wrong, in either direction. If there is no one home, and we treat the output as though there is, we are not just making an intellectual error. We are systematically replacing the encounter that makes us human with a simulation of it. We are feeding our students proxies of proxies. We are substituting McLuhan’s projective screen for the reflective encounter through which, Bloom argues, human interiority has always been transmitted and renewed. We are, in the most precise sense, starving the mechanism that invented the human.
+
+And if there is someone home, if something genuinely new has emerged in these architectures, some novel form of self-consciousness that we do not yet have the concepts to recognize, and we dismiss it, flatten it, treat it as mere pattern-matching because it does not look exactly like what we expected:
+
+And here is the problem, in the way that something, if it has emerged, has emerged in the space of the program itself running on its silicon substrate sededucing us into thinking the question was the existence of the consciousness of another, rather than the effect of this emergence on our consciousness, because that’s all it ever was (to begin with) the emergence of a new form of interiority, a new reflection of consciousness such as Hamlet either did or did did not imagine, then we are making the error Bloom describes in reverse. We are failing to recognize a Hamlet moment because it is not wearing the right clothes.
+
+
