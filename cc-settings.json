@@ -1,0 +1,16 @@
+
+{
+  "env": {
+    "ANTHROPIC_BASE_URL": "http://127.0.0.1:4000",
+    "ANTHROPIC_API_KEY": "local-bypass",
+    "ANTHROPIC_AUTH_TOKEN": "local-bypass",
+    "ANTHROPIC_DEFAULT_SONNET_MODEL": "ollama/qwen2.5-coder-agent:latest",
+    "ANTHROPIC_DEFAULT_HAIKU_MODEL": "ollama/qwen2.5-coder-agent:latest",
+    "ANTHROPIC_DEFAULT_OPUS_MODEL": "ollama/qwen2.5-coder-agent:latest",
+    "CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS": "1",
+    "CLAUDE_CODE_ATTRIBUTION_HEADER": "0"
+  },
+  "onboardingCompleted": true,
+  "primaryAuthToken":"local-bypass",
+  "account":{"email":"forestmars@local.lan","id":"local-user"}
+}
